@@ -18,7 +18,7 @@ public sealed class GameObjectsManager : MonoBehaviour
         else
         {
             _instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
 
     }
