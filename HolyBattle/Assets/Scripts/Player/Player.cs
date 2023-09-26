@@ -4,63 +4,58 @@ using UnityEngine;
 using Mirror;
 using UnityEngine.AI;
 using UnityEngine.Networking;
-
-public class Player : NetworkBehaviour
+ 
+namespace GamePlayer
 {
-    [SyncVar]
-    [SerializeField] private float _attackRange;
-
-    [SyncVar]
-    [SerializeField] private GameObject _projectile;
-
-
-    DBManager db;
-
-    private Animator _playerAnim;
-
-    private void Awake()
+    public class Player : NetworkBehaviour
     {
-        _playerAnim = GetComponent<Animator>();
-    }
+        [SyncVar]
+        [SerializeField] private float _attackRange;
 
-    private void Start()
-    {
-        db = new DBManager();
-        StartCoroutine(test());
-    }
-
-    private void Update()
-    {
-        CmdDoAttack();
-    }
-
-    public IEnumerator test()
-    {
-        string[] formValue = { "give_me_skills" };
-        UnityWebRequest rq = db.ConnectToDB(formValue);
-        yield return rq.SendWebRequest();
-        Debug.Log(rq.downloadHandler.text);
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        CmdOnCollisionEnter(collision);
-    }
+        [SyncVar]
+        [SerializeField] private GameObject _projectile;
 
 
-    [Command] //Обработка события коллизии на сервере
-    private void CmdOnCollisionEnter(Collision collision)
-    {
+        DBManager db;
 
-    }
+        private Animator _playerAnim;
 
-    [Command]
-    private void CmdDoAttack()
-    {
-        if (_playerAnim.GetFloat("Walk") <= _attackRange)
+        private void Awake()
         {
-            
+            _playerAnim = GetComponent<Animator>();
         }
+
+        private void Start()
+        {
+            db = new DBManager();
+        }
+
+        private void Update()
+        {
+            CmdDoAttack();
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            CmdOnCollisionEnter(collision);
+        }
+
+
+        [Command] //Обработка события коллизии на сервере
+        private void CmdOnCollisionEnter(Collision collision)
+        {
+
+        }
+
+        [Command]
+        private void CmdDoAttack()
+        {
+            if (_playerAnim.GetFloat("Walk") <= _attackRange)
+            {
+            
+            }
+        }
+
     }
 
 }
