@@ -2,6 +2,9 @@
 # Unity folders and files
 ###
 [Aa]ssets/AssetStoreTools*
+[Aa]ssets/Resources
+[Aa]ssets/Prefabs
+[Aa]ssets/Prefab
 [Bb]uild/
 [Bb]uilds/
 [Ll]ibrary/

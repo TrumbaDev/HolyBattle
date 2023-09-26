@@ -7,4 +7,5 @@ public class GameEventManager : MonoBehaviour
     public static Action StartMovementAction; //объявляет о старте игры, меняет булева в Movement
     //public static Action <GameObject, GameObject> SpawnOnStartInGrid; //передает значения в GameObjectsManager об НПС которые появятся на сетке
     public static Action StopPrefabEvent;
+    //public static Action IsBakeEvent; //перепекает MeshSurface
 }

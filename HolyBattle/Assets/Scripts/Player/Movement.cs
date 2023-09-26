@@ -1,4 +1,6 @@
 using Mirror;
+using Unity.AI.Navigation;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,10 +9,11 @@ public class Movement : NetworkBehaviour
     private NavMeshAgent _agent;
     private bool _isGameStarted = false;
     private Animator _animator;
-
-    [SerializeField] private Transform _agroTransform;
-    [SerializeField] private GameObject _stopPrefab;
+    private NPC _classNPC;
     
+    [SerializeField] private Transform _agroTransform;
+    [SerializeField] private GameObject _agroGameObject;
+        
     public string _gridPos, _gridTeam;
     public GameObject _gridParent;
 
@@ -18,6 +21,7 @@ public class Movement : NetworkBehaviour
     {
         _agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
+        _classNPC = GetComponent<NPC>();
 
         GameEventManager.StartMovementAction += ChangeStartBool;
         
@@ -35,12 +39,19 @@ public class Movement : NetworkBehaviour
         {
             _agent.SetDestination(_agroTransform.position);
             _animator.SetFloat("Movement", _agent.remainingDistance);
-            transform.LookAt(new Vector3(_agroTransform.position.x, 0f, _agroTransform.position.z));
+            transform.LookAt(new Vector3(_agroTransform.position.x, _agroTransform.position.y, _agroTransform.position.z));
         }
         else
         {
             _animator.SetFloat("Movement", 0);
             FindClosestEnemy();
+            _classNPC.OnTriggerExitMovement();
+            return;
+        }
+
+        if(_animator.GetFloat("Movement") > _agent.stoppingDistance + 0.2f)
+        {
+            _classNPC.OnTriggerExitMovement();
         }
     }
 
@@ -59,6 +70,8 @@ public class Movement : NetworkBehaviour
             {
                 _agroTransform = go.transform;
                 distance = curDistance;
+
+                _agroGameObject = go;
             }
         }
     }
@@ -92,4 +105,41 @@ public class Movement : NetworkBehaviour
     {
         Destroy(gameObject);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        other.gameObject.TryGetComponent(out Movement _otherMove);
+
+        if (!_otherMove)
+        {
+            return;
+        }
+        
+        bool _isEqualDistance = _agent.remainingDistance == _agent.stoppingDistance;
+        bool _isEqualTeam = _otherMove._gridTeam == _gridTeam;
+
+        if (_isEqualTeam && _isEqualDistance)
+        {
+            _agent.avoidancePriority += 1;
+        }
+        else if (_isEqualTeam && !_isEqualDistance)
+        {
+            _agent.avoidancePriority = 0;
+        }
+
+        if (!_isEqualTeam)
+        {
+            _agroTransform = other.transform;
+            _agroGameObject = other.gameObject;
+            _classNPC.OnTriggerEnterMovement();
+        }
+    }
+
+    /*private void OnTriggerExit(Collider other)
+    {
+        if (_agroGameObject == other.gameObject)
+        {
+            _classNPC.OnTriggerExitMovement();
+        }
+    }*/
 }
