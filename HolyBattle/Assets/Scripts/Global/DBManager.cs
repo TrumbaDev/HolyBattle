@@ -2,31 +2,47 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Runtime.CompilerServices;
-using UnityEngine.Events;
-
-[System.Serializable]
 public class UserData
 {
     public Player playerData;
-    public Error error = new Error();
+    public Error error;
 }
-[System.Serializable]
+
 public class Error
 {
     public string errorText;
     public bool isError;
 }
-[System.Serializable]
+
 public class Player
 {
     public int id;
     public string login;
+    public float power, dexterity, intelligence, health, base_damage, attack_speed, armor, magic_resistance, move_speed;
 
-    public Player(string nick)
-    {
-        login = nick;
-    }
-    public void SetNickname(string name) => login = name;
+    //public Player(string nick, float power, float dexterity, float intelligence, float health, float base_damage, float attack_speed, float armor, float magic_resistance, float move_speed)
+    //{
+    //    login = nick;
+        //this.power = power;
+        //this.dexterity = dexterity;
+        //this.intelligence = intelligence;
+        //this.health = health;
+        //this.base_damage = base_damage;
+        //this.attack_speed = attack_speed;
+        //this.armor = armor;
+        //this.magic_resistance = magic_resistance;
+        //this.move_speed = move_speed;
+    //}
+    //public void SetNickname(string name) => login = name;
+    //public void SetPower(float power) => this.power = power;
+    //public void SetDexterity(float dexterity) => this.dexterity = dexterity;
+    //public void SetIntelligence(float intelligence) => this.intelligence = intelligence;
+    //public void SetHealth(float health) => this.health = health;
+    //public void SetBaseDamage(float base_damage) => this.base_damage = base_damage;
+    //public void SetAttackSpeed(float attack_speed) => this.attack_speed = attack_speed;
+    //public void SetArmor(float armor) => this.armor = armor;
+    //public void SetMagicResistance(float magic_resistance) => this.magic_resistance = magic_resistance;
+    //public void SetMoveSpeed(float move_speed) => this.move_speed = move_speed;
 }
 
 
@@ -51,11 +67,10 @@ public class DBManager
 {
     private UserData _userData = new UserData();
     private string _targetUrl = "http://localhost/HolyBattle/index.php";
-    private UnityEvent OnLogged, OnRegistered, OnError;
 
     private enum RequestType
     {
-        logging, register, save
+        logging, register, save, get_stats
     }
 
     private string GetUserData(UserData data)
@@ -77,7 +92,6 @@ public class DBManager
         else
         {
             //_userData.error.errorText = "To small length";
-            OnError.Invoke();
         }
     }
 
@@ -103,11 +117,10 @@ public class DBManager
         else
         {
             //userData.error.errorText = "To small length";
-            OnError.Invoke();
         }
     }
 
-    public void Registering(string login, string password, string passwordConfirm, string email)
+    private void Registering(string login, string password, string passwordConfirm, string email)
     {
         WWWForm form = new WWWForm();
         form.AddField("type", RequestType.register.ToString());
@@ -123,12 +136,21 @@ public class DBManager
         SaveProgress(id);
     }
 
-    public void SaveProgress(int id)
+    private void SaveProgress(int id)
     {
         WWWForm form = new WWWForm();
         form.AddField("type", RequestType.save.ToString());
         form.AddField("id", id);
         SendData(form, RequestType.save);
+    }
+
+    public void GetUserStats()
+    {
+        //_userData.playerData = new Player() { id = 1 };
+        WWWForm form = new WWWForm();
+        form.AddField("type", RequestType.get_stats.ToString());
+        form.AddField("userID", _userData.playerData.id);
+        SendData(form, RequestType.get_stats);
     }
 
     private bool IsValidStr(string str, int characters = 256)
@@ -199,34 +221,15 @@ public class DBManager
             case RequestType.register:
                 _userData = data;
                 break;
+            case RequestType.get_stats:
+                _userData = data;
+                GameEventManager.OnGetStats?.Invoke(_userData);
+                break;
             default:
                 _userData.error.isError = true;
                 _userData.error.errorText = "Undefined RequestType";
                 break;
         }
-    }
-
-
-    public UnityWebRequest ConnectToDB(string requestType, string[] filedsName, string[] values)
-    {
-        if (requestType == null || requestType == "")
-            return null;
-
-        if (filedsName.Length == 0 || values.Length == 0)
-            return null;
-
-        WWWForm form = new WWWForm();
-        for (int i = 0; i < filedsName.Length; i++)
-        {
-            if (values[i] == null)
-                values[i] = "";
-
-            form.AddField(filedsName[i], values[i]);
-        }
-
-        UnityWebRequest rq = UnityWebRequest.Post("http://localhost/HolyBattle/index.php", form);
-
-        return rq;
     }
 
 }

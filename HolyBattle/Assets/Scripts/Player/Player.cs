@@ -23,16 +23,35 @@ namespace GamePlayer
         private void Awake()
         {
             _playerAnim = GetComponent<Animator>();
+            GameEventManager.OnGetStats += GetStatsHandler;
         }
 
         private void Start()
         {
             db = new DBManager();
+            StartCoroutine(test());
+        }
+
+        IEnumerator test()
+        {
+            yield return new WaitForSeconds(2f);
+            db.GetUserStats();
         }
 
         private void Update()
         {
             CmdDoAttack();
+        }
+
+        private void GetStatsHandler(UserData userData)
+        {
+            if (userData.error.isError)
+            { 
+                Debug.Log(userData.error.errorText);
+                return;
+            }
+
+            Debug.Log(userData.playerData.health);
         }
 
         private void OnCollisionEnter(Collision collision)
