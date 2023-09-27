@@ -9,6 +9,7 @@ public class UserData
 {
     public Player playerData;
     public Error error = new Error();
+    public NPCData npcData;
 }
 [System.Serializable]
 public class Error
@@ -27,6 +28,11 @@ public class Player
         login = nick;
     }
     public void SetNickname(string name) => login = name;
+}
+
+public class NPCData
+{
+    public string NameLvlNpc1, NameLvlNpc2, NameLvlNpc3, NameLvlNpc4;
 }
 
 
@@ -55,7 +61,7 @@ public class DBManager
 
     private enum RequestType
     {
-        logging, register, save
+        logging, register, save, takeNPCData
     }
 
     private string GetUserData(UserData data)
@@ -66,6 +72,11 @@ public class DBManager
     private UserData SetUserData(string data)
     {
         return JsonUtility.FromJson<UserData>(data);
+    }
+
+    private NPCData SetNPCData(string data)
+    {
+        return JsonUtility.FromJson<NPCData>(data);
     }
 
     public void Login(string login, string password)
