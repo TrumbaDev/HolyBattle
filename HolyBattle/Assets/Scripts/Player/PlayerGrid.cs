@@ -167,21 +167,7 @@ public class PlayerGrid : NetworkBehaviour
 
     #region NPCInfo
 
-    public class NPCInfoPhP
-    {
-        public string[] Num;
-        
-        public string PlayerID;        
-        public string Position1;
-        public string Position2;
-        public string Position3;
-        public string Position4;
-        public string Position5;
-        public string Position6;
-        public string Position7;
-        public string Position8;
-        public string Position9;
-    }
+    
 
     #endregion
 }
