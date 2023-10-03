@@ -31,6 +31,7 @@ public class PlayerGrid : NetworkBehaviour
     {
         _cameraTransform = Camera.main.transform;
         _netRegistredPrefab = GameObject.Find("NetMan").GetComponent<NetMan>().spawnPrefabs;
+        GameEventManager.OnGetStats += GetStatsHandler;
     }
 
     private void Start()
@@ -71,6 +72,18 @@ public class PlayerGrid : NetworkBehaviour
         //[Position2] => \n            [Position3] => Mage/Mage\n            [Position4] => \n            [Position5] => Paladin/Paladin\n
         //[Position6] => Mage/Mage\n            [Position7] => Mage/Mage\n            [Position8] => Paladin/Paladin\n            [Position9] => \n        )\n\n)\n"
         yield return new WaitForSeconds(1);
+        _dbManager.GetUserStats();
+    }
+
+    private void GetStatsHandler(UserData userData)
+    {
+        if (userData.error.isError)
+        {
+            Debug.Log(userData.error.errorText + "awdaw");
+            return;
+        }
+
+        Debug.Log(userData.playerData.health + "awdaw");
     }
 
     private void SetCameraForPlayer(Vector3 _pos, Vector3 _rotat) //метод определяет камеру для игрока в зависимости от его команды

@@ -6,12 +6,13 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
+    public int num, PlayerID, Lvl, Rare, Position;
+    public string NameNPC;
+    
     private Dictionary<Type, INPCBehaviour> _behaviourMap;
     private INPCBehaviour _behaviourCurrent;
     private Animator _animator;
-    
-
-    [SerializeField] private float _health, _armor, _mageResist, _strenght, _intellect, _agility, _moveSpeed, _attackSpeed, _baseDamage;
+    private float _power, _dexterity, _intelligence, _health, _base_damage, _attack_speed, _armor, _magic_resistance, _move_speed;//_health, _armor, _mageResist, _strenght, _intellect, _agility, _moveSpeed, _attackSpeed, _baseDamage;
 
     void Start()
     {
@@ -21,7 +22,7 @@ public class NPC : MonoBehaviour
 
     #region ParametrsWork
 
-    public void InitializedParametrNPC(string _nameParametr, float _valueParametr)
+    /*public void InitializedParametrNPC(string _nameParametr, float _valueParametr)
     {
         switch (_nameParametr)
         {
@@ -53,7 +54,7 @@ public class NPC : MonoBehaviour
                 _baseDamage += _valueParametr;
                 break;
         }
-    }
+    }*/
 
     #endregion
 

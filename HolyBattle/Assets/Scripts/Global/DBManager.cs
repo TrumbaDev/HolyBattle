@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 public class UserData
 {
     public Player playerData;
+    public NPC[] npcData;
     public Error error;
 }
 
@@ -19,6 +20,8 @@ public class Player
     public int id;
     public string login;
     public float power, dexterity, intelligence, health, base_damage, attack_speed, armor, magic_resistance, move_speed;
+    //public string NameLvlNPC1, NameLvlNPC2, NameLvlNPC3, NameLvlNPC4;
+    //public NPC[] npcData;
 
     //public Player(string nick, float power, float dexterity, float intelligence, float health, float base_damage, float attack_speed, float armor, float magic_resistance, float move_speed)
     //{
@@ -149,7 +152,7 @@ public class DBManager
         //_userData.playerData = new Player() { id = 1 };
         WWWForm form = new WWWForm();
         form.AddField("type", RequestType.get_stats.ToString());
-        form.AddField("userID", _userData.playerData.id);
+        form.AddField("userID", 1);// _userData.playerData.id);
         SendData(form, RequestType.get_stats);
     }
 
