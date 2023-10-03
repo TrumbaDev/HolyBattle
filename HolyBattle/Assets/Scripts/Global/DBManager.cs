@@ -4,9 +4,10 @@ using UnityEngine.Networking;
 using System.Runtime.CompilerServices;
 public class UserData
 {
-    public Player playerData;
-    public NPC[] npcData;
-    public Error error;
+    public Player playerData = new Player();
+    //Создали экземпляр класса чтобы отсюда потом выдать NPC
+    public NPCData npcData = new NPCData();
+    public Error error = new Error();
 }
 
 public class Error
@@ -48,6 +49,13 @@ public class Player
     //public void SetMoveSpeed(float move_speed) => this.move_speed = move_speed;
 }
 
+//Создали класс для хранения переменных которые придут с PHP
+public class NPCData
+{
+    public int num, PlayerID, Lvl, Rare, Position;
+    public string NameNPC;
+}
+
 
 //Класс необходимый для запуска www.SendWebRequest() при помощи await
 //Т.к. класс DBManager не унаследован от MonoBehaviour, то Coroutine запустить не представляется возможным. А по умолчанию метод www.SendWebRequest() не содержит определения GetAwaiter()
@@ -83,6 +91,7 @@ public class DBManager
 
     private UserData SetUserData(string data)
     {
+        //Принятый ответ в формате JSON преобразовали в переменные которые находятся в классах
         return JsonUtility.FromJson<UserData>(data);
     }
 
@@ -149,10 +158,11 @@ public class DBManager
 
     public void GetUserStats()
     {
+        //Заполнили форму которая улетит в PHP скрипт для получения данных
         //_userData.playerData = new Player() { id = 1 };
         WWWForm form = new WWWForm();
         form.AddField("type", RequestType.get_stats.ToString());
-        form.AddField("userID", 1);// _userData.playerData.id);
+       // form.AddField("userID", 1);// _userData.playerData.id);
         SendData(form, RequestType.get_stats);
     }
 
@@ -203,17 +213,20 @@ public class DBManager
 
     private async void SendData(WWWForm form, RequestType type)
     {
+        //Бросили запрос к php скрипту
         UnityWebRequest www = UnityWebRequest.Post(_targetUrl, form);
+        //Подождали ответ
         await www.SendWebRequest();
-
+        //Проверили ответ на успешность
         if (www.result != UnityWebRequest.Result.Success)
         {
             _userData.error.errorText = www.error;
             _userData.error.isError = true;
             return;
         }
+        //Преобразовали из JSON в обычные переменные которые в классах
         UserData data = SetUserData(www.downloadHandler.text);
-
+        //В зависимости от запроса обработали данные
         switch (type)
         {
             case RequestType.save:
@@ -226,6 +239,7 @@ public class DBManager
                 break;
             case RequestType.get_stats:
                 _userData = data;
+                //Кидаем инвок к eventу чтобы классы которые участвуют в игре узнали об ответе
                 GameEventManager.OnGetStats?.Invoke(_userData);
                 break;
             default:

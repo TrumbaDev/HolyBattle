@@ -46,7 +46,7 @@ namespace GamePlayer
         private void GetStatsHandler(UserData userData)
         {
             if (userData.error.isError)
-            { 
+            {
                 Debug.Log(userData.error.errorText);
                 return;
             }

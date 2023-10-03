@@ -14,10 +14,38 @@ public class NPC : MonoBehaviour
     private Animator _animator;
     private float _power, _dexterity, _intelligence, _health, _base_damage, _attack_speed, _armor, _magic_resistance, _move_speed;//_health, _armor, _mageResist, _strenght, _intellect, _agility, _moveSpeed, _attackSpeed, _baseDamage;
 
+    DBManager db;
+
     void Start()
     {
+        //Создаем экземпляр класса чтобы кинуть запрос
+        db = new DBManager();
+        //Подписываемся на event чтобы узнать ответ
+        GameEventManager.OnGetStats += GetStatsHandler;
         InitBehaviors();
         _animator = GetComponent<Animator>();
+        //Корутина не обязательна, нужна просто для тестов чтобы выждать 2 секунды
+        //На самом деле можно кидать запрос откуда угодно
+        StartCoroutine(test());
+    }
+
+    IEnumerator test()
+    {
+        yield return new WaitForSeconds(2f);
+        db.GetUserStats();
+    }
+
+    private void GetStatsHandler(UserData userData)
+    {
+        //В случае если ошибка, то обрабатываем, иначе обрабатываем нужные значения
+        if (userData.error.isError)
+        {
+            Debug.Log(userData.error.errorText);
+            return;
+        }
+
+        //Debug.Log(userData.playerData.health);
+        Debug.Log(userData.npcData.Rare);
     }
 
     #region ParametrsWork
