@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4513150422324264857}
   - component: {fileID: 2111221518272056480}
   - component: {fileID: -3815822367623286600}
+  - component: {fileID: 1150125264087349211}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -118,7 +119,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8090228958066430775}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2094cd40ceae5a499628ed2e9cbf084, type: 3}
   m_Name: 
@@ -126,11 +127,8 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  _speedMove: 0
   _attackRange: 0
   _projectile: {fileID: 0}
-  NavMeshAgent: {fileID: 0}
-  agro: {fileID: 0}
 --- !u!114 &4513150422324264857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,3 +189,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1150125264087349211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8090228958066430775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7e92d3e115a1b24a9dcd24d329ca1a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  num: 0
+  PlayerID: 0
+  Lvl: 0
+  Rare: 0
+  Position: 0
+  NameNPC: 
