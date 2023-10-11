@@ -1,4 +1,5 @@
-public interface IBuff
+//тот самый generic который активирует любой бафф вне зависимости от его типа данных
+public interface IBuff<T> where T : IStats
 {
-    CharacterStats ApplyBuff(CharacterStats baseStats);
+    T ApplyBuff(T baseStats);
 }

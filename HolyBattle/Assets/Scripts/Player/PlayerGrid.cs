@@ -118,7 +118,7 @@ public class PlayerGrid : NetworkBehaviour
                 case <=50:
                     //SpawnNPC(_x, _newNPC, _SpawnSpots[_x]);print(_newNPC);
                     //GameObject _spawnObject = Instantiate(_cube, _SpawnSpots[_x].transform.position, _SpawnSpots[_x].transform.rotation);
-                    SpawnNPC(_x);//_spawnObject);
+                    CmdSpawnNPC(_x);//_spawnObject);
                     break;
                 case >50:
                     break;
@@ -127,7 +127,7 @@ public class PlayerGrid : NetworkBehaviour
     }
 
     [Command]
-    private void SpawnNPC(int _x)//, GameObject _NPC, GameObject _Spots)
+    private void CmdSpawnNPC(int _x)//, GameObject _NPC, GameObject _Spots)
     {
 
 /*#if UNITY_EDITOR
