@@ -1,4 +1,5 @@
 //using OpenCover.Framework.Model;
+using palladinTank;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,11 +9,14 @@ public class NPC : MonoBehaviour
 {
     public int num, PlayerID, Lvl, Rare, Position;
     public string NameNPC;
-    
-    private Dictionary<Type, INPCBehaviour> _behaviourMap;
-    private INPCBehaviour _behaviourCurrent;
+
+    protected Dictionary<Type, INPCBehaviour> _behaviourMap;
+    protected INPCBehaviour _behaviourCurrent;
     private Animator _animator;
-    private float _power, _dexterity, _intelligence, _health, _base_damage, _attack_speed, _armor, _magic_resistance, _move_speed;//_health, _armor, _mageResist, _strenght, _intellect, _agility, _moveSpeed, _attackSpeed, _baseDamage;
+    protected float _power, _dexterity, _intelligence, _health, _base_damage, _attack_speed, _armor, _magic_resistance, _move_speed;//_health, _armor, _mageResist, _strenght, _intellect, _agility, _moveSpeed, _attackSpeed, _baseDamage;
+    //временна€ переменна€ дл€ тестов
+    protected float _enemyHealth;
+
 
     DBManager db;
 
@@ -26,7 +30,13 @@ public class NPC : MonoBehaviour
         _animator = GetComponent<Animator>();
         // орутина не об€зательна, нужна просто дл€ тестов чтобы выждать 2 секунды
         //Ќа самом деле можно кидать запрос откуда угодно
-        StartCoroutine(test());
+        //StartCoroutine(test());
+        
+    }
+
+    protected virtual void Update()
+    {
+        _behaviourCurrent?.Update();
     }
 
     IEnumerator test()
@@ -88,12 +98,17 @@ public class NPC : MonoBehaviour
 
     #region AnimationWork
 
-    private void InitBehaviors()
+    protected virtual void InitBehaviors()
     {
         _behaviourMap = new Dictionary<Type, INPCBehaviour>();
 
         _behaviourMap[typeof(AttackBehaviour)] = new AttackBehaviour(this);
 
+    }
+
+    public void GetOutOfState()
+    {
+        _behaviourCurrent = null;
     }
 
     public void OnTriggerEnterMovement()//bool _isTrigger)
@@ -103,23 +118,23 @@ public class NPC : MonoBehaviour
         SetBehaviour(_behaviourMap[typeof(AttackBehaviour)]);
         //}
     }
-
+    
     public void OnTriggerExitMovement()
     {
-        if (_behaviourCurrent == _behaviourMap[typeof(AttackBehaviour)])
+        if (_behaviourCurrent == GetBehaviour<AttackBehaviour>())
         {
             _behaviourCurrent.Exit();
         }
         //SetBehaviour(_behaviourMap[null]);
     }
 
-    /*private INPCBehaviour GetBehaviour<T>() where T : INPCBehaviour
+    protected INPCBehaviour GetBehaviour<T>() where T : INPCBehaviour
     {
         var type = typeof(T);
         return _behaviourMap[type];
-    }*/
+    }
 
-    private void SetBehaviour(INPCBehaviour newBehaviour)//, Class _newBehaviour)
+    protected void SetBehaviour(INPCBehaviour newBehaviour)//, Class _newBehaviour)
     {
         if (_behaviourCurrent != null)
             _behaviourCurrent.Exit();

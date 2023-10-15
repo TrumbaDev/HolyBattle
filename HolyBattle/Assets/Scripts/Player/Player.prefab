@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4513150422324264857}
   - component: {fileID: 2111221518272056480}
   - component: {fileID: -3815822367623286600}
-  - component: {fileID: 1150125264087349211}
+  - component: {fileID: 2082452384175275250}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -189,7 +189,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1150125264087349211
+--- !u!114 &2082452384175275250
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -198,12 +198,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 8090228958066430775}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7e92d3e115a1b24a9dcd24d329ca1a5, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b74a6660ca73664eb3a82493d1b6f69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  num: 0
-  PlayerID: 0
-  Lvl: 0
-  Rare: 0
-  Position: 0
-  NameNPC: 

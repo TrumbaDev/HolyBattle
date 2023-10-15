@@ -14,7 +14,7 @@ public class Movement : NetworkBehaviour
     [SerializeField] private Transform _agroTransform;
     [SerializeField] private GameObject _agroGameObject;
         
-    public string _gridPos, _gridTeam;
+    public string _gridPos, _gridTeam;//gridTeam содержит "Team1" "Team2"
     public GameObject _gridParent;
 
     void Start()
@@ -24,7 +24,7 @@ public class Movement : NetworkBehaviour
         _classNPC = GetComponent<NPC>();
 
         GameEventManager.StartMovementAction += ChangeStartBool;
-        
+        _isGameStarted = true;//удалить
         Invoke("CheckGridCount", 2f);
     }
 
@@ -39,7 +39,7 @@ public class Movement : NetworkBehaviour
         {
             _agent.SetDestination(_agroTransform.position);
             _animator.SetFloat("Movement", _agent.remainingDistance);
-            transform.LookAt(new Vector3(_agroTransform.position.x, _agroTransform.position.y, _agroTransform.position.z));
+            transform.LookAt(new Vector3(_agroTransform.position.x, _agroTransform.position.y, _agroTransform.position.z));            
         }
         else
         {
@@ -54,7 +54,7 @@ public class Movement : NetworkBehaviour
             _classNPC.OnTriggerExitMovement();
         }
     }
-
+    
     private void FindClosestEnemy() //метод по поиску ближайшего врага, сначала ищет врага со своей линии
     {
         GameObject[] enemy = GameObjectsManager.GetNPCGridByName(_gridTeam, _gridPos);

@@ -102,7 +102,7 @@ public sealed class GameObjectsManager : MonoBehaviour
         return _items.Length;
     }
 
-    public static GameObject[] GetNPCGridByName(string _gridTeam, string _gridPos)
+    public static GameObject[] GetNPCGridByName(string _gridTeam, string _gridPos)//есть на моей линии енеми или нет
     {
         List<GameObject> _itemsLine = new List<GameObject>();
         List<GameObject> _itemsNotLine = new List<GameObject>();
